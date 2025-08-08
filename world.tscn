@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://uqrqng3qanfq"]
+[gd_scene load_steps=7 format=3 uid="uid://uqrqng3qanfq"]
 
 [ext_resource type="Script" uid="uid://c6fa6j1di8gcs" path="res://world.gd" id="1_58n65"]
 [ext_resource type="PackedScene" uid="uid://df3rikr3va82q" path="res://scenes/stage/stage.tscn" id="1_ea3cy"]
 [ext_resource type="PackedScene" uid="uid://cvr6opvp31hp6" path="res://scenes/characters/player.tscn" id="2_fso2d"]
 [ext_resource type="PackedScene" uid="uid://e05qktjpp8do" path="res://sss/barrel.tscn" id="4_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://tvnee0ffemy4" path="res://shader/godrays.tscn" id="5_036b0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ktcqf"]
 size = Vector2(6, 64)
@@ -42,3 +43,9 @@ position = Vector2(46, 40)
 [node name="Barrel" parent="ActorsContaier" instance=ExtResource("4_aqk2v")]
 y_sort_enabled = true
 position = Vector2(117, 46)
+
+[node name="godrays" parent="." instance=ExtResource("5_036b0")]
+offset_left = -13.0
+offset_top = 1.0
+offset_right = 78.0
+offset_bottom = 66.0
