@@ -38,17 +38,17 @@ float random(vec2 _uv) {
 float noise (in vec2 uv) {
     vec2 i = floor(uv);
     vec2 f = fract(uv);
-    
+
     // Four corners in 2D of a tile
     float a = random(i);
     float b = random(i + vec2(1.0, 0.0));
     float c = random(i + vec2(0.0, 1.0));
     float d = random(i + vec2(1.0, 1.0));
-    
+
     // Smooth Interpolation
     // Cubic Hermine Curve. Same as SmoothStep()
     vec2 u = f * f * (3.0-2.0 * f);
-    
+
     // Mix 4 corners percentages
     return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
@@ -83,19 +83,19 @@ void fragment()
     // Pixelate the UV coordinates
     vec2 pixelated_uv = pixelate_uv(UV, pixelation);
     vec2 screen_pixelated_uv = pixelate_uv(SCREEN_UV, pixelation);
-    
+
     // Use pixelated UVs for the god rays calculation
     vec2 transformed_uv = (rotate(angle) * (pixelated_uv - position)) / ((pixelated_uv.y + spread) - (pixelated_uv.y * spread));
-    
+
     // Animate the ray according to the new transformed UVs
     vec2 ray1 = vec2(transformed_uv.x * ray1_density + sin(TIME * 0.1 * speed) * (ray1_density * 0.2) + seed, 1.0);
     vec2 ray2 = vec2(transformed_uv.x * ray2_density + sin(TIME * 0.2 * speed) * (ray1_density * 0.2) + seed, 1.0);
-    
+
     // Cut off the ray's edges
     float cut = step(cutoff, transformed_uv.x) * step(cutoff, 1.0 - transformed_uv.x);
     ray1 *= cut;
     ray2 *= cut;
-    
+
     // Apply the noise pattern (i.e. create the rays)
     float rays;
     if (hdr){
@@ -106,27 +106,27 @@ void fragment()
     else{
         rays = clamp(noise(ray1) + (noise(ray2) * ray2_intensity), 0., 1.);
     }
-    
+
     // Fade out edges using pixelated UV
     rays *= smoothstep(0.0, falloff, (1.0 - pixelated_uv.y)); // Bottom
     rays *= smoothstep(0.0 + cutoff, edge_fade + cutoff, transformed_uv.x); // Left
     rays *= smoothstep(0.0 + cutoff, edge_fade + cutoff, 1.0 - transformed_uv.x); // Right
-    
+
     // Apply dithering if enabled
     if (dither) {
         float dither_noise = dither_pattern(UV * pixelation) * dither_strength;
         rays += (dither_noise - 0.5) * 0.1;
         rays = clamp(rays, 0.0, 1.0);
     }
-    
+
     // Color to the rays
     vec3 shine = vec3(rays) * ray_color.rgb;
-    
+
     // Quantize colors if enabled
     if (quantize_colors) {
         shine = quantize_color(shine, color_levels);
     }
-    
+
     // Try different blending modes for a nicer effect. "Screen" is included in the code,
     // but take a look at https://godotshaders.com/snippet/blending-modes/ for more.
     // With "Screen" blend mode using pixelated screen texture:
@@ -135,12 +135,12 @@ void fragment()
         screen_color.rgb = quantize_color(screen_color.rgb, color_levels);
     }
     shine = screen(screen_color, vec4(ray_color)).rgb;
-    
+
     float final_alpha = rays * ray_color.a;
     if (quantize_colors) {
         final_alpha = floor(final_alpha * float(color_levels)) / float(color_levels);
     }
     final_alpha *= opacity;
-    
+
     COLOR = vec4(shine, final_alpha);
 }
