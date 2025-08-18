@@ -45,7 +45,8 @@ y_sort_enabled = true
 position = Vector2(117, 46)
 
 [node name="godrays" parent="." instance=ExtResource("5_036b0")]
-offset_left = -13.0
-offset_top = 1.0
-offset_right = 78.0
-offset_bottom = 66.0
+visible = false
+offset_left = 1.0
+offset_top = 3.0
+offset_right = 92.0
+offset_bottom = 68.0

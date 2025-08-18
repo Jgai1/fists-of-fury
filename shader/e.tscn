@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlk7qkqqdbtwd"]
+
+[ext_resource type="PackedScene" uid="uid://tvnee0ffemy4" path="res://shader/godrays.tscn" id="1_qf2pr"]
+
+[node name="e" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="godrays" parent="." instance=ExtResource("1_qf2pr")]
+layout_mode = 1
+offset_left = 13.0
+offset_top = -3.0
+offset_right = -47.0
+offset_bottom = -20.0
