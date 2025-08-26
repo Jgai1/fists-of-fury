@@ -8,7 +8,7 @@ extends CharacterBody2D
 @onready var character_sprite := $CharacterSprite
 @onready var damage_emitter: Area2D = $DamageEmitter
 
-enum State {IDLE, WALK, ATTACK}
+enum State {IDLE, WALK, ATTACK, TAKEOFF, JUMP, LAND}
 
 var state := State.IDLE
 
@@ -58,6 +58,12 @@ func  can_move() ->bool:
 	return state == State.IDLE or state == State.WALK
 
 func on_action_complete() ->void:
+	state = State.IDLE
+
+func on_takeoff_complete() -> void:
+	state = State.JUMP
+	pass
+func  on_land_complete() -> void:
 	state = State.IDLE
 func on_emit_damage(damage_receiver:DamegeReceiver) -> void:
 	var direction := Vector2.LEFT if damage_receiver.global_position.x < global_position.x else Vector2.RIGHT
